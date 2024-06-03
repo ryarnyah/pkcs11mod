@@ -34,6 +34,22 @@ package pkcs11mod
 #include <string.h>
 #include <unistd.h>
 #include "spec/pkcs11go.h"
+
+static inline CK_RV bridge_CK_CREATEMUTEX(CK_CREATEMUTEX f, CK_VOID_PTR_PTR ppMutex) {
+	return f(ppMutex);
+}
+
+static inline CK_RV bridge_CK_DESTROYMUTEX(CK_CREATEMUTEX f, CK_VOID_PTR pMutex) {
+	return f(pMutex);
+}
+
+static inline CK_RV bridge_CK_LOCKMUTEX(CK_LOCKMUTEX f, CK_VOID_PTR pMutex) {
+	return f(pMutex);
+}
+
+static inline CK_RV bridge_CK_UNLOCKMUTEX(CK_UNLOCKMUTEX f, CK_VOID_PTR pMutex) {
+	return f(pMutex);
+}
 */
 import "C"
 
@@ -105,7 +121,7 @@ func goLog(s unsafe.Pointer) {
 }
 
 //export goInitialize
-func goInitialize(s *C.CK_C_INITIALIZE_ARGS_PTR) C.CK_RV {
+func goInitialize(s *C.CK_C_INITIALIZE_ARGS) C.CK_RV {
 	if backend == nil {
 		log.Println("pkcs11mod: Can't initialize nil backend")
 
