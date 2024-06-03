@@ -21,7 +21,7 @@
 
 #include "spec/pkcs11go.h"
 
-CK_RV goInitialize(void);
+CK_RV goInitialize(CK_C_INITIALIZE_ARGS_PTR);
 CK_RV goFinalize(void);
 CK_RV goGetInfo(ckInfoPtr);
 CK_RV goGetSlotList(CK_BBOOL, CK_SLOT_ID_PTR, CK_ULONG_PTR);
@@ -168,12 +168,18 @@ CK_FUNCTION_LIST pkcs11_functions =
 
 CK_DEFINE_FUNCTION(CK_RV, C_Initialize)(CK_VOID_PTR pInitArgs)
 {
-	return goInitialize();
+	if (NULL != pInitArgs && ((CK_C_INITIALIZE_ARGS_PTR)pInitArgs)->pReserved != NULL) {
+		return CKR_ARGUMENTS_BAD;
+	}
+	return goInitialize((CK_C_INITIALIZE_ARGS_PTR)pInitArgs);
 }
 
 
 CK_DEFINE_FUNCTION(CK_RV, C_Finalize)(CK_VOID_PTR pReserved)
 {
+	if (NULL != pReserved) {
+		return CKR_ARGUMENTS_BAD;
+	}
 	return goFinalize();
 }
 
