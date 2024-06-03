@@ -232,11 +232,11 @@ func goGetSlotList(tokenPresent C.CK_BBOOL, pSlotList C.CK_SLOT_ID_PTR, pulCount
 
 		// Check to make sure that the buffer is big enough
 		goRequestedCount := uint(*pulCount)
+		*pulCount = C.CK_ULONG(goCount)
 		if goRequestedCount < goCount {
 			return C.CKR_BUFFER_TOO_SMALL
 		}
 
-		*pulCount = C.CK_ULONG(goCount)
 		fromList(slotList, C.CK_ULONG_PTR(pSlotList), goCount)
 	}
 
@@ -365,11 +365,11 @@ func goGetMechanismList(slotID C.CK_SLOT_ID, pMechanismList C.CK_MECHANISM_TYPE_
 
 		// Check to make sure that the buffer is big enough
 		goRequestedCount := uint(*pulCount)
+		*pulCount = C.CK_ULONG(goCount)
 		if goRequestedCount < goCount {
 			return C.CKR_BUFFER_TOO_SMALL
 		}
 
-		*pulCount = C.CK_ULONG(goCount)
 		fromMechanismList(mechanismList, C.CK_ULONG_PTR(pMechanismList), goCount)
 	}
 
