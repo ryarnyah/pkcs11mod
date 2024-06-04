@@ -132,7 +132,8 @@ func goInitialize(s *C.CK_C_INITIALIZE_ARGS) C.CK_RV {
 		log.Println("pkcs11mod Initialize")
 	}
 
-	var mutex unsafe.Pointer
+	// TODO
+	/*var mutex unsafe.Pointer
 	if s != nil && s.CreateMutex != nil {
 		pMutex := unsafe.Pointer(mutex)
 		ecore := C.bridge_CK_CREATEMUTEX(s.CreateMutex, (C.CK_VOID_PTR_PTR)(pMutex))
@@ -143,11 +144,11 @@ func goInitialize(s *C.CK_C_INITIALIZE_ARGS) C.CK_RV {
 		if ecore != C.CKR_OK {
 			return ecore
 		}
-	}
+	}*/
 
 	err := backend.Initialize()
 
-	if s != nil && s.CreateMutex != nil {
+	/*if s != nil && s.CreateMutex != nil {
 		ecore := C.bridge_CK_UNLOCKMUTEX(s.UnlockMutex, (C.CK_VOID_PTR)(mutex))
 		if ecore != C.CKR_OK {
 			return ecore
@@ -156,7 +157,7 @@ func goInitialize(s *C.CK_C_INITIALIZE_ARGS) C.CK_RV {
 		if ecore != C.CKR_OK {
 			return ecore
 		}
-	}
+	}*/
 
 	return fromError(err)
 }
