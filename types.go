@@ -198,7 +198,11 @@ func toMechanism(pMechanism C.CK_MECHANISM_PTR) *pkcs11.Mechanism {
 
 		return pkcs11.NewMechanism(uint(pMechanism.mechanism), pkcs11.NewOAEPParams(goHashAlg, goMgf, goSourceType, goSourceData))
 	default:
-		return pkcs11.NewMechanism(uint(pMechanism.mechanism), nil)
+		if uint(pMechanism.mechanism) <= uint(C.CKM_RSA_PKCS_OAEP_TPM_1_1) && uint(pMechanism.ulParameterLen) > 0 {
+			return pkcs11.NewMechanism(uint(pMechanism.mechanism), C.GoBytes(unsafe.Pointer(C.getMechanismParam(pMechanism)), C.int(pMechanism.ulParameterLen)))
+		} else {
+			return pkcs11.NewMechanism(uint(pMechanism.mechanism), nil)
+		}
 	}
 }
 
