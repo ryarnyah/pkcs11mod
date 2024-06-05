@@ -121,7 +121,7 @@ func goLog(s unsafe.Pointer) {
 }
 
 //export goInitialize
-func goInitialize(s *C.CK_C_INITIALIZE_ARGS) C.CK_RV {
+func goInitialize() C.CK_RV {
 	if backend == nil {
 		log.Println("pkcs11mod: Can't initialize nil backend")
 
@@ -132,32 +132,7 @@ func goInitialize(s *C.CK_C_INITIALIZE_ARGS) C.CK_RV {
 		log.Println("pkcs11mod Initialize")
 	}
 
-	// TODO
-	/*var mutex unsafe.Pointer
-	if s != nil && s.CreateMutex != nil {
-		pMutex := unsafe.Pointer(mutex)
-		ecore := C.bridge_CK_CREATEMUTEX(s.CreateMutex, (C.CK_VOID_PTR_PTR)(pMutex))
-		if ecore != C.CKR_OK {
-			return ecore
-		}
-		ecore = C.bridge_CK_LOCKMUTEX(s.LockMutex, (C.CK_VOID_PTR)(mutex))
-		if ecore != C.CKR_OK {
-			return ecore
-		}
-	}*/
-
 	err := backend.Initialize()
-
-	/*if s != nil && s.CreateMutex != nil {
-		ecore := C.bridge_CK_UNLOCKMUTEX(s.UnlockMutex, (C.CK_VOID_PTR)(mutex))
-		if ecore != C.CKR_OK {
-			return ecore
-		}
-		ecore = C.bridge_CK_DESTROYMUTEX(s.DestroyMutex, (C.CK_VOID_PTR)(mutex))
-		if ecore != C.CKR_OK {
-			return ecore
-		}
-	}*/
 
 	return fromError(err)
 }
